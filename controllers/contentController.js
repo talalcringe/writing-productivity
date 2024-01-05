@@ -84,10 +84,10 @@ exports.createTextFilesAndUpload = async (req, res, next) => {
     const fileExists = await checkFileExistsInDrive(fileName, token);
 
     if (fileExists) {
-      return res.status(409).json({
-        success: false,
-        message: 'File with the same name already exists in the drive.',
-      });
+      throw new CustomError(
+        409,
+        'File with the same name already exists in the drive.'
+      );
     }
 
     // Upload the text file to Google Drive
