@@ -82,13 +82,12 @@ exports.createTextFilesAndUpload = async (req, res, next) => {
 
     // Check if a file with the same name already exists in Google Drive
     const fileExists = await checkFileExistsInDrive(fileName, token);
-    if (pagenum != undefined) {
-      if (fileExists) {
-        return res.status(409).json({
-          success: false,
-          message: 'File with the same name already exists in the drive.',
-        });
-      }
+
+    if (fileExists) {
+      return res.status(409).json({
+        success: false,
+        message: 'File with the same name already exists in the drive.',
+      });
     }
 
     // Upload the text file to Google Drive
@@ -106,12 +105,15 @@ exports.createTextFilesAndUpload = async (req, res, next) => {
 
 async function checkFileExistsInDrive(fileName, token) {
   try {
+    // Create an OAuth2 client with the given credentials
+    oAuth2Client.setCredentials(token);
+
     // Use the Google Drive API to list files
-    const drive = google.drive({ version: 'v3', auth: token });
+    const drive = google.drive({ version: 'v3', auth: oAuth2Client });
     const response = await drive.files.list({
       q: `name='${fileName}'`,
     });
-
+    console.log(response);
     // If files with the same name are found, return true
     return response.data.files.length > 0;
   } catch (error) {
@@ -129,7 +131,7 @@ async function uploadTextFileToDrive(fileName, pagenum, token, text) {
 
   // Ensure the "ProductiveWriting" folder exists and get its ID
   const productiveWritingFolderId = await ensureFolderExists(drive);
-  console.log('pagenum', pagenum);
+
   const pageFolderId = await getPageFolderId(
     drive,
     productiveWritingFolderId,
