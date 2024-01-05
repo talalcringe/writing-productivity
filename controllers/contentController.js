@@ -71,7 +71,9 @@ exports.createPageFolder = async (req, res, next) => {
 //create Text Files And Upload to drive
 exports.createTextFilesAndUpload = async (req, res, next) => {
   const { token } = req.userData;
+  console.log('here1');
   try {
+    console.log('here1');
     const { updatedDataFormat } = req.body;
     const { max, pagenum, text } = updatedDataFormat;
     console.log('updatedDataFormat', updatedDataFormat);
