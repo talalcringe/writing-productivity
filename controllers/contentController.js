@@ -74,6 +74,7 @@ exports.createTextFilesAndUpload = async (req, res, next) => {
   try {
     const { updatedDataFormat } = req.body;
     const { max, pagenum, text } = updatedDataFormat;
+    console.log('updatedDataFormat', updatedDataFormat);
 
     const fileName = `page_${pagenum}_v${max}.txt`;
 
