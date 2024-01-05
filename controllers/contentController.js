@@ -82,12 +82,13 @@ exports.createTextFilesAndUpload = async (req, res, next) => {
 
     // Check if a file with the same name already exists in Google Drive
     const fileExists = await checkFileExistsInDrive(fileName, token);
-
-    if (fileExists) {
-      return res.status(409).json({
-        success: false,
-        message: 'File with the same name already exists in the drive.',
-      });
+    if (pagenum != undefined) {
+      if (fileExists) {
+        return res.status(409).json({
+          success: false,
+          message: 'File with the same name already exists in the drive.',
+        });
+      }
     }
 
     // Upload the text file to Google Drive
@@ -128,7 +129,7 @@ async function uploadTextFileToDrive(fileName, pagenum, token, text) {
 
   // Ensure the "ProductiveWriting" folder exists and get its ID
   const productiveWritingFolderId = await ensureFolderExists(drive);
-
+  console.log('pagenum', pagenum);
   const pageFolderId = await getPageFolderId(
     drive,
     productiveWritingFolderId,
