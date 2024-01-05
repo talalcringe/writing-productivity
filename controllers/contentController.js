@@ -71,12 +71,9 @@ exports.createPageFolder = async (req, res, next) => {
 //create Text Files And Upload to drive
 exports.createTextFilesAndUpload = async (req, res, next) => {
   const { token } = req.userData;
-  console.log('here1');
   try {
-    console.log('here2');
     const { updatedDataFormat } = req.body;
     const { max, pagenum, text } = updatedDataFormat;
-    console.log('updatedDataFormat', updatedDataFormat);
 
     const fileName = `page_${pagenum}_v${max}.txt`;
 
@@ -113,7 +110,6 @@ async function checkFileExistsInDrive(fileName, token) {
     const response = await drive.files.list({
       q: `name='${fileName}'`,
     });
-    console.log(response);
     // If files with the same name are found, return true
     return response.data.files.length > 0;
   } catch (error) {
